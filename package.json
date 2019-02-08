@@ -1,10 +1,6 @@
 {
   "name": "my-app",
   "version": "0.0.0",
-  "engines": {
-    "node": "9.2.1",
-    "yarn": "1.5.1"
-  },
   "scripts": {
     "start:heroku": "node dist/server",
     "heroku-postbuild": "npm run build:ssr",

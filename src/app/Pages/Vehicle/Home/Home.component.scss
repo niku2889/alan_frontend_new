@@ -1,0 +1,506 @@
+:host ::ng-deep .mat-tab-label .mat-tab-label-content {
+    display: block!important;
+}
+
+ :host ::ng-deep  .mat-tab-label {
+    height: 150px!important;
+    width: 150px;
+    padding: 0px;
+    background: white;
+    margin-right: 10px;
+}
+
+:host ::ng-deep .col-gap > div {
+  margin : 1rem auto;
+}
+
+:host ::ng-deep .carousel-control-prev-icon {
+    background-image: url(http://www.pngmart.com/files/3/Previous-Button-PNG-HD.png);
+}
+
+:host ::ng-deep .carousel-control-next-icon {
+    background-image: url(http://www.pngmart.com/files/3/Next-Button-Transparent-Background.png);
+}
+
+:host ::ng-deep  .carousel-control-next-icon {
+    height: 30px!important;
+}
+
+:host ::ng-deep  .carousel-control-prev-icon {
+    height: 30px!important;
+}
+
+.nice_line { 
+    margin: 25px 0;
+    height: 1px;
+    border: 0;
+    background: black;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, black));
+}
+
+:host ::ng-deep .input-group {
+    width: 300px!important;
+    margin: 0 auto;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2px 5px;
+}
+
+.button5 {border-radius: 50%;}
+
+:host ::ng-deep .form-control {
+    border-radius: .25rem!important;
+    border: 1px solid #5d748c!important;
+}
+
+:host ::ng-deep .form-control:focus {
+    border-color: #0277bd!important;
+    box-shadow: 0 0 0 0.1rem rgba(15, 73, 135, 0.25)!important;
+}
+
+.featureCls{
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    padding: 10px;
+}
+
+.hr-sect {
+	display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    color: #0277bd !important;
+    margin: 8px 0px;
+    font-size: x-large;
+    font-style: italic;
+    font-variant: small-caps;
+}
+.hr-sect::before,
+.hr-sect::after {
+	content: "";
+	flex-grow: 1;
+	background: #0277bd;
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 0px 8px;
+}
+
+:host ::ng-deep .mat-tab-body-wrapper {
+    width:100%;
+}
+
+.overlay-section-content h4 {
+    color: black;
+}
+
+.overlay-section-content {
+    position: relative;
+    z-index: 9;
+    padding: 2rem;
+}
+
+.end-left {
+    display: flex;
+    align-items: end;
+    height: 100%;
+}
+
+.main-bg-inner {
+    // height: 150px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.overlay-section-item {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+}
+
+
+
+.cat-img{
+    width: 100%;
+    height: 200px!important;
+}
+
+.section-title-toolbar {
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.shop-card-gap {
+    margin-top: -70px;
+    padding: 1rem;
+}
+
+
+@media (min-width: 768px) and (max-width: 2000px) {
+    .imghr {
+        height: 200px!important;
+    }
+}
+
+@media (min-width: 332px) and (max-width: 768px) {
+    .imghr {
+        height: auto!important;
+    }
+}
+
+.sidenav-fix {
+    transform: translate3d(0px, 0px, 0px);
+    visibility: visible;
+ }
+
+// :host ::ng-deep .mat-drawer-content {
+//     margin-left:175px!important;
+// }
+
+:host ::ng-deep .mat-drawer {
+    width:175px!important;
+}
+
+:host ::ng-deep .mat-drawer-side {
+    border-right: 1px solid rgba(0,0,0,.12);
+}
+
+.shop-filters-wrap {
+    margin-top: 7px;
+    padding: 0 .5rem 0 .333rem;
+}
+
+:host ::ng-deep .mat-standard-chip:focus {
+    color: white;
+    background: #9575CD;
+}
+
+:host ::ng-deep .mat-standard-chip:visited {
+    color: white;
+    background: #9575CD;
+}
+
+:host ::ng-deep .mat-chip.mat-standard-chip {
+    color: white;
+    background: #0277bd;
+}
+
+:host ::ng-deep .mat-chip.mat-standard-chip.mat-chip-selected {
+    color: white;
+    background: #9575CD;
+}
+
+:host ::ng-deep .mat-expansion-indicator::after {
+    color: #00729e;
+}
+
+:host ::ng-deep .mat-standard-chip {
+    padding: 10px;
+    border-radius: 3px;
+}
+
+:host ::ng-deep .mat-chip {
+    font-size: 18px;
+    // line-height: 30px;
+}
+
+:host ::ng-deep .mat-chip-list-wrapper {
+    display: block!important;
+    margin: 0 auto!important;
+}
+
+:host ::ng-deep .header-less-tabs .mat-tab-group .mat-tab-header { 
+    display: none; 
+    
+}
+
+:host ::ng-deep .header-less-tabs .block-title { 
+    display: none; 
+}
+
+:host ::ng-deep .mat-checkbox-layout {
+    white-space: initial!important;
+}
+
+:host ::ng-deep [dir=rtl] .mat-checkbox-inner-container {
+    padding-right: 8px!important;
+}
+
+
+.hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    margin: 1rem;
+    font-weight: bold;
+    &:before {
+      content: '';
+      // use the linear-gradient for the fading effect
+      // use a solid background color for a solid bar
+      background: linear-gradient(to right, transparent, #818078, transparent);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+    }
+    &:after {
+      content: attr(data-content);
+      position: relative;
+      display: inline-block;
+      color: black;
+  
+      padding: 0 .5em;
+      line-height: 1.5em;
+      // this is really the only tricky part, you need to specify the background color of the container element...
+      color: #818078;
+      background-color: #fcfcfa;
+    }
+  }
+
+:host ::ng-deep .mat-tab-header-pagination {
+    display: none!important;
+  }
+
+  :host ::ng-deep .shop-card-wrapper-new  .mat-tab-header-pagination {
+    display: none !important;
+   }
+
+   
+.rating {
+    float:left;
+}
+
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0.1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+}
+
+
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+}
+
+:host ::ng-deep .cdk-overlay-connected-position-bounding-box {
+  
+    margin-top: 40px!important;
+}
+
+:host ::ng-deep .mat-badge-content {
+    background: deeppink!important;
+}
+
+.ql-size-huge{
+    font-size: 3.25rem;
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: 500;
+}
+
+.ql-size-large{
+    font-size: 2.813rem;
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: 500;
+}
+
+
+.sline{
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: 500;
+    border-bottom:3px solid #ff5722;
+}
+
+.btn-ctm{
+    min-width: 140px;
+    background: #0277bd;
+}
+
+.btn-buy{
+    min-width: 140px;
+    background: #28a745;
+}
+
+:host ::ng-deep .mat-expansion-indicator::after {
+    padding: 8px!important;
+    vertical-align: baseline!important; 
+}
+
+:host ::ng-deep .mat-expansion-panel-body {
+    padding: 0px!important; 
+}
+
+:host ::ng-deep .mat-expansion-panel-header {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+:host ::ng-deep .mat-expansion-panel {
+    border-radius: 5px;
+}
+
+.price-table{
+    padding-top: 20px;
+    text-align: center;
+    border:none;
+    vertical-align: bottom;
+}
+
+.aco-header{
+    background:#e6e6e6!important;
+    font-size: 16px;
+    font-weight: 500;
+    max-height: 50px;
+}
+
+.other-img{
+    width: auto;
+    max-height: 40px;
+    object-fit: scale-down;
+}
+
+.oth-table{
+    vertical-align: bottom;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+:host ::ng-deep .table th, .table td{
+    padding:5px!important;
+}
+
+.cl-db{
+    color: #0277bd;
+}
+
+.img-gb{
+    width: 40px;
+    height: 60px;
+}
+
+.in-vrm{
+    height: auto;
+    background: #fec224;
+}
+
+.pointer{
+    cursor:pointer;
+}
+
+.img-hw{
+    height: 100px!important;
+    width:100px!important;
+}
+
+.green{
+    color:#28a745;
+}
+
+.img-oth{
+    width:150px;
+    height:40px;
+}
+
+.w-33{
+    width:33%;
+}
+
+.oth-price{
+    vertical-align: inherit;
+    text-align: center;
+}
+
+.white{
+    color:white!important;
+}
+
+.w-15{
+    width:15%;
+}
+
+.w-45{
+    width:45%;
+}
+
+.w-40{
+    width:40%;
+}
+
+.img-yin{
+    object-fit: scale-down;
+    max-height: 280px;
+}
+
+.v-btm{
+    vertical-align: bottom;
+}
+
+.v-mdl{
+    vertical-align: middle;
+}
+
+.dir-ltr{
+    direction:ltr;
+}
+
+.r-30{
+    right:30px!important;
+}
+
+.mt-150{
+    margin-top: 150px;
+}
+
+.img-cate{
+    height: 80px;
+    object-fit: scale-down;
+}
+
+.nospace{
+    white-space: initial;
+}
+
+.h-load{
+    height: 40px;
+}

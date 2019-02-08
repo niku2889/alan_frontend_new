@@ -1,0 +1,16 @@
+.bg-fb{
+    background-color:#4267b2!important;
+}
+
+.bg-tw{
+    background-color:#38A1F3!important;
+}
+
+.bg-in{
+    background-color:#231F20!important;
+}
+
+:host ::ng-deep .mat-mini-fab{
+    border-radius: 25%!important;
+    color:white!important;
+}

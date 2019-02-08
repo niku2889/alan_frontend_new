@@ -1,0 +1,47 @@
+.responsive-toggle {
+  display: none;
+}
+
+
+
+@media(max-width:960px) {
+  .responsive-toggle {
+    display: block;
+  }
+}
+
+:host ::ng-deep .app-nav .app-nav-list > li {
+  margin: 0px!important; 
+  border-right: 2px solid white;
+  border-image: linear-gradient(to top, #283593 25%, white 25%, white 50%,white 50%, white 75%, #283593 75%) 5;
+}
+
+.search-form {
+  // border-radius: 30px 0px 0px 30px;
+}
+
+.search-btn {
+  border-radius: 0px 30px 30px 0px;
+  cursor:pointer;
+}
+
+.logo-hw{
+  width: 224px;
+  height: 50px;
+}
+
+.cls-search{
+  border-radius: 30px 0px 0px 30px;
+  height: 35px;
+}
+
+.h-35px{
+  height: 35px;
+}
+
+.flex-d{
+  align-items: stretch;
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+}

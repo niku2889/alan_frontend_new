@@ -1,0 +1,23 @@
+// Shop Card 
+body .mat-card .mat-card-image {
+	max-width: inherit;
+}
+
+.m-icon {
+	position: absolute;
+	top: -49px;
+	right: -5px;
+	transition: all 0.3s ease-in;
+}
+
+mat-card:hover .m-icon {
+	transform: translateY(-20px);
+}
+
+.no-card-content {
+	padding-bottom: 0 !important;
+}
+
+.card-shadow {
+	box-shadow: $card-shadow;
+}

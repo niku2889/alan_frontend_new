@@ -1,0 +1,750 @@
+<p-toast styleClass="mt-150"></p-toast>
+<ng-container>
+  <div class="inner-container">
+    <div class="container">
+      <div fxLayout="row wrap" class="col-gap">
+        <!--Choose vehicle form -->
+        <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100">
+          <div fxLayout="row wrap" *ngIf="isReg">
+            <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100">
+              <div class="card overlay-section-item">
+                <div class="pl-3 pt-2">
+                  <b>YOUR CURRENT VEHICLE</b>
+                </div>
+                <div class="pl-3 pt-2 pb-2">
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <div class="cl-db">{{make}} > {{model}} > {{engine}} > {{year}}</div>
+                    </div>
+                    <div class="col-md-12">
+                      <button class="btn btn-primary btn-ctm" (click)="viewAllCategory()">View Category</button>
+                      <button class="btn btn-primary btn-ctm mr-3 float-right" (click)="resetVehicle()">
+                        Change
+                        Vehicle</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card overlay-section-item" *ngIf="!isReg">
+            <div class="card-header">
+              <b>SELECT YOUR VEHICLE</b>
+            </div>
+            <div class="card-body">
+              <form [formGroup]="vehicleForm" (ngSubmit)="submit()">
+                <div class="row">
+                  <div class="col-md-3 mb-1">
+                    <select class="form-control" (change)="changeManu($event.target.value,false)" name="manufacturer"
+                      formControlName="manufacturer" required>
+                      <option selected value="" disabled> -- SELECT MAKE --</option>
+                      <option *ngFor="let item of manufacturerData" value="{{item}}">{{item}}</option>
+                    </select>
+                    <small *ngIf="vehicleForm.controls['manufacturer'].hasError('required') && vehicleForm.controls['manufacturer'].touched"
+                      class="font-small-1 text-danger">
+                      Make is required
+                    </small>
+                  </div>
+                  <div class="col-md-3 mb-1">
+                    <select class="form-control" (change)="changeModel($event.target.value,false)" name="model"
+                      formControlName="model" required >
+                      <option selected value="" disabled> -- SELECT MODEL --</option>
+                      <option *ngFor="let item of modelData" value="{{item}}">{{item}}</option>
+                    </select>
+                    <small *ngIf="vehicleForm.controls['model'].hasError('required') && vehicleForm.controls['model'].touched"
+                      class="font-small-1 text-danger">
+                      Model is required
+                    </small>
+                  </div>
+                  <div class="col-md-3 mb-1">
+                    <select class="form-control" (change)="changeEngine($event.target.value,false)" name="engine"
+                      formControlName="engine" required>
+                      <option selected value="" disabled> -- SELECT ENGINE --</option>
+                      <option *ngFor="let item of engineData" value="{{item}}">{{item}}</option>
+                    </select>
+                    <small *ngIf="vehicleForm.controls['engine'].hasError('required') && vehicleForm.controls['engine'].touched"
+                      class="font-small-1 text-danger">
+                      Engine is required
+                    </small>
+                  </div>
+                  <div class="col-md-2 mb-1">
+                    <select class="form-control" (change)="changeYear($event.target.value)" name="year" formControlName="year"
+                      required>
+                      <option selected value="" disabled> -- SELECT YEAR --</option>
+                      <option *ngFor="let item of yearData" value="{{item}}">{{item}}</option>
+                    </select>
+                    <small *ngIf="vehicleForm.controls['year'].hasError('required') && vehicleForm.controls['year'].touched"
+                      class="font-small-1 text-danger">
+                      Year is required
+                    </small>
+                  </div>
+                  <div class="col-md-1 mb-1">
+                    <button type="submit" class="btn btn-primary btn-block pointer" [disabled]="vehicleForm.invalid">GO</button>
+                  </div>
+                </div>
+              </form>
+              <hr class="hr-text" data-content="OR" />
+              <form (keydown)="submitRegEvent($event)">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text p-0" id="basic-addon1"><img class="img-gb" src="../../assets/images/gb.jpg"
+                        alt="gbicon"></span>
+                  </div>
+                  <input type="text" name="vrmName" class="form-control in-vrm" placeholder="ENTER YOUR REG."
+                    [(ngModel)]="regNo">
+                  <button type="button" class="button button5 pointer" (click)="submitReg(true)">GO</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!--Slider panel-->
+        <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100" *ngIf="isSlider" class="m-3 p-0 overlay-section-item">
+          <carousel>
+            <slide *ngFor="let item of sliderData">
+              <div class="text-center py-5 bg-white text-white">
+                <h1 class="fa-3x">{{item.name}}</h1>
+                <div class="lead">
+                  <p [innerHTML]='item.description'></p>
+                </div>
+              </div>
+            </slide>
+          </carousel>
+        </div>
+      </div>
+
+      <!--Loading panel-->
+      <div class="row mt-4" *ngIf="isLoading1">
+        <div class="col-md-12 text-center ">
+          <img src="../../assets/images/ajax-loader.gif" alt="loading" />
+        </div>
+      </div>
+
+      <!--compare now text-->
+      <div class="block-title text-center" *ngIf="isCategory">
+        <div *ngIf="availableCategory.length > 0" class="hr-sect">Compare now by Categories</div>
+      </div>
+
+      <!--showing all categories-->
+      <div class="col-gap row" *ngIf="isCategory">
+        <div *ngFor="let item of availableCategory" class="col-md-12 mb-2 m-0">
+          <a class="p-link pointer" (click)="selectedCategory(item?.name)">
+            <div class="main-bg-inner overlay-section-item overlay-section-overlay relative bg-white">
+              <table class="w-100">
+                <tr>
+                  <td class="w-75">
+                    <h1 class="m-1 ml-3 fa-2x font-bold">{{item.name}}</h1>
+                  </td>
+                  <td class="w-25">
+                    <img *ngIf="item._id != 1" src="data:image/jpg;base64,{{item.photo}}" class="img-cate" alt="{{item?.name}}">
+                    <img *ngIf="item._id == 1" src="{{item.photo}}" class="img-cate" alt="{{item?.name}}">
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!--category panel with location-->
+      <mat-toolbar *ngIf="isProduct" class="section-title-toolbar mat-toolbar mat-primary mat-toolbar-multiple-rows"
+        color="primary">
+        <mat-toolbar-row class="mat-toolbar-row pl-0 pr-0 h-auto">
+          <div class="w-100">
+            <div class="col-md-12 p-0">
+              <div class="block-title">
+                <h1 class="text-inverse mb-0"> {{sCategory}} {{selectedLocation}}
+                  <button *ngIf="isLocation" dir="rtl" mat-raised-button class="font-bold float-right"
+                    [matMenuTriggerFor]="menu">Filter
+                    <span class="mat-badge mat-badge-above mat-badge-after mat-badge-medium" matbadge="filterCount"
+                      matbadgeoverlap="false">
+                      <mat-icon class="v-mdl">filter_list</mat-icon>
+                      <span class="mat-badge-content mat-badge-active">{{filterCount}}</span>
+                    </span>
+                  </button>
+                  <button *ngIf="isMultiLocation" dir="rtl" mat-raised-button class="font-bold float-right"
+                    [matMenuTriggerFor]="menuMulti">Filter
+                    <span class="mat-badge mat-badge-above mat-badge-after mat-badge-medium" matbadge="filterCount"
+                      matbadgeoverlap="false">
+                      <mat-icon class="v-mdl">filter_list</mat-icon>
+                      <span class="mat-badge-content mat-badge-active">{{filterCount}}</span>
+                    </span>
+                  </button>
+                  <mat-menu #menu="matMenu" yPosition="above" xPosition="after" class="r-30">
+                    <div class="shop-card-wrapper dir-ltr">
+                      <mat-tab-group (click)="stopClosing($event)">
+                        <mat-tab label="Brand">
+                          <div fxLayout="row wrap" class="p-2">
+                            <div *ngFor="let s of brandData" fxFlex.xs="50" fxFlex.sm="50" fxFlex.md="50" fxFlex.lg="50"
+                              fxFlex.xl="50">
+                              <mat-checkbox [(ngModel)]="s.checked" (change)="updateFilter(s.name,$event)">{{s.name}}</mat-checkbox>
+                            </div>
+                            <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100">
+                              <button class="btn btn-success btn-sm" (click)="clearBrand()">
+                                <mat-icon class="v-btm">delete_forever</mat-icon> Clear
+                                all
+                              </button>
+                              <button class="btn btn-danger btn-sm float-right" (click)="closeMenu1()">
+                                <mat-icon class="v-btm">close</mat-icon>
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </mat-tab>
+                        <mat-tab label="Rating">
+                          <div fxLayout="row wrap" class="p-2">
+                            <div *ngFor="let star of starData" fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100"
+                              fxFlex.lg="100" fxFlex.xl="100">
+                              <mat-checkbox [(ngModel)]="star.checked">
+                                <embryo-Rating [rate]="star.value"></embryo-Rating>
+                              </mat-checkbox>
+                            </div>
+                            <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100">
+                              <button class="btn btn-success btn-sm">
+                                <mat-icon class="v-btm">delete_forever</mat-icon>
+                                Clear
+                              </button>
+                              <button class="btn btn-danger btn-sm float-right" (click)="closeMenu1()">
+                                <mat-icon class="v-btm">close</mat-icon>
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </mat-tab>
+                        <mat-tab label="Price Range">
+                          <div fxLayout="row wrap" class="p-2">
+                          </div>
+                        </mat-tab>
+                      </mat-tab-group>
+                    </div>
+                  </mat-menu>
+                  <mat-menu #menuMulti="matMenu" yPosition="above" xPosition="after" class="r-30">
+                    <div class="shop-card-wrapper dir-ltr">
+                      <mat-tab-group (click)="stopClosing($event)">
+                        <mat-tab label="Brand">
+                          <div fxLayout="row wrap" class="p-2">
+                            <div *ngFor="let s of brandData" fxFlex.xs="50" fxFlex.sm="50" fxFlex.md="50" fxFlex.lg="50"
+                              fxFlex.xl="50">
+                              <mat-checkbox [(ngModel)]="s.checked" (change)="updateFilterVarient(s.name,$event)">{{s.name}}</mat-checkbox>
+                            </div>
+                            <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100">
+                              <button class="btn btn-success btn-sm" (click)="clearBrandVarient()">
+                                <mat-icon class="v-btm">delete_forever</mat-icon>
+                                Clear all
+                              </button>
+                              <button class="btn btn-danger btn-sm float-right" (click)="closeMenu1()">
+                                <mat-icon class="v-btm">close</mat-icon>
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </mat-tab>
+                        <mat-tab label="Rating">
+                          <div fxLayout="row wrap" class="p-2">
+                            <div *ngFor="let star of starData" fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100"
+                              fxFlex.lg="100" fxFlex.xl="100">
+                              <mat-checkbox [(ngModel)]="star.checked">
+                                <embryo-Rating [rate]="star.value"></embryo-Rating>
+                              </mat-checkbox>
+                            </div>
+                            <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100">
+                              <button class="btn btn-success btn-sm">
+                                <mat-icon class="v-btm">delete_forever</mat-icon>
+                                Clear
+                              </button>
+                              <button class="btn btn-danger btn-sm float-right" (click)="closeMenu1()">
+                                <mat-icon class="v-btm">close</mat-icon>
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </mat-tab>
+                        <mat-tab label="Price Range">
+                          <div fxLayout="row wrap" class="p-2">
+                          </div>
+                        </mat-tab>
+                      </mat-tab-group>
+                    </div>
+                  </mat-menu>
+                </h1>
+              </div>
+            </div>
+          </div>
+        </mat-toolbar-row>
+      </mat-toolbar>
+
+      <div *ngIf="isProduct">
+        <div class="row mt-4" *ngIf="isLoading">
+          <div class="col-md-12 text-center ">
+            <img src="../../assets/images/ajax-loader.gif" alt="loading" />
+          </div>
+        </div>
+        <div class="shop-card-wrapper mb-5" *ngIf="isResult">
+          <div class="col-gap">
+            <!--with yinyan-->
+            <div #yinyan class="m-0">
+              <div class="main-bg-inner overlay-section-item overlay-section-overlay relative bg-white mt-2 shadow-sm"
+                *ngIf="isMultiLocation">
+                <table class="w-100">
+                  <tr>
+                    <td class="w-25">
+                      <h4 class="m-1 ml-3 font-bold">Fitment Position:</h4>
+                    </td>
+                    <td class="w-75">
+                      <mat-chip-list #chipList single class="float-right">
+                        <mat-chip (click)="selectLocation(item)" *ngFor="let item of locationData"
+                          [selectable]="true" [selected]="selectedChip(item)">
+                          {{item}}
+                        </mat-chip>
+                      </mat-chip-list>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!--varient data-->
+              <div *ngIf="isYinYan" [ngClass]="{ 'header-less-tabs': tabLength <= 1 }">
+                <div class="block-title text-center mt-2">
+                  <h5 class="m-2 cl-db">Does Your Vehicle Have:</h5>
+                </div>
+                <mat-tab-group (selectedTabChange)="tabChange($event)">
+                  <mat-tab *ngFor="let item2 of getcategoryFilter(sCategory); let i = index">
+                    <ng-template mat-tab-label>
+                      <img alt="{{item2.yinYan}}" onerror="this.src='../../assets/images/noimage.png'" [src]="imageURL + imageData[i]"
+                        class="img-hw">
+                      <p class="m-0 nospace"><strong>{{item2.yinYangQ1}}</strong> </p>
+                      <p class="m-0 nospace"><strong>{{item2.yinYan}}</strong> </p>
+                    </ng-template>
+                    <div fxLayout="row wrap " class="mt-2">
+                      <mat-sidenav-container class="example-container w-100" autosize>
+                        <mat-sidenav-content>
+                          <div fxLayout='row wrap' fxLayoutAlign="center center">
+                            <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md=100 fxFlex.lg="100" fxFlex.xl="100">
+                              <div fxLayout='row wrap' class="position-relative">
+                                <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md=50 fxFlex.lg="50" fxFlex.xl="50" class="text-center">
+                                  <div class="m-2">
+                                    <carousel>
+                                      <slide>
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.articleMediaFiles"
+                                            alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                      <slide *ngIf="filterVData[pIndex]?.image2">
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.image2" alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                      <slide *ngIf="filterVData[pIndex]?.image3">
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.image3" alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                      <slide *ngIf="filterVData[pIndex]?.image4">
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.image4" alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                      <slide *ngIf="filterVData[pIndex]?.image5">
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.image5" alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                      <slide *ngIf="filterVData[pIndex]?.image6">
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.image6" alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                      <slide *ngIf="filterVData[pIndex]?.image7">
+                                        <div class="text-center py-5 bg-white text-white">
+                                          <img mat-card-image [src]="imageURL + filterVData[pIndex]?.image7" alt="{{filterVData[pIndex]?.supBrand}} {{filterVData[pIndex]?.artArticleNr}} {{filterVData[pIndex]?.descriptions}}"
+                                            class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                        </div>
+                                      </slide>
+                                    </carousel>
+                                  </div>
+                                </div>
+                                <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md=50 fxFlex.lg="50" fxFlex.xl="50" class="m-auto">
+                                  <h4>{{filterVData[pIndex]?.supBrand}} - {{filterpData[pIndex]?.artArticleNr}}
+                                    <embryo-SocialShareProduct class="float-right" [url]="shareUrl"></embryo-SocialShareProduct>
+                                  </h4>
+                                  <div>
+                                    <ul class="no-style">
+                                      <li>
+                                        <h5 class="font-medium m-0">From : <span class="green" *ngIf="filterVData[pIndex]?.price != ''">{{filterVData[pIndex]?.price}}</span>
+                                          <span class="green" *ngIf="filterVData[pIndex]?.price == ''">NA</span>
+                                        </h5>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-accordion multi="true">
+                            <mat-expansion-panel [expanded]="isPriceView == 0" (closed)="setStep(1)" class="mb-2">
+                              <mat-expansion-panel-header class="aco-header">
+                                <mat-panel-title>
+                                  Available Stores
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <table class="table">
+                                <tr>
+                                  <td class="w-33"><img src="../../assets/images/amazon.jpg" align="left" border="0"
+                                      class="img-oth" alt="amazon">
+                                  </td>
+                                  <td class="oth-price">
+                                    <h5 *ngIf="filterVData[pIndex]?.price != ''">From: <span class="green">{{filterVData[pIndex]?.price}}</span></h5>
+                                    <h5 *ngIf="filterVData[pIndex]?.price == ''">From: <span class="green">NA</span></h5>
+                                  </td>
+                                  <td class="text-center">
+                                    <button *ngIf="filterVData[pIndex]?.amazonLink" class="btn btn-primary btn-sm">
+                                      <a class="btn btn-sm white" href="{{filterVData[pIndex]?.amazonLink}}" target="_blank">
+                                        In Store</a>
+                                    </button>
+                                  </td>
+                                  <td class="v-btm">
+                                    <a class="pointer" *ngIf="isARefresh" (click)="isAmazonPrice(filterVData[pIndex]?.artEANNumber,filterVData[pIndex]?.supBrand,filterVData[pIndex]?.artArticleNr,filterVData[pIndex]?._id,pIndex,true)">
+                                      <mat-icon>refresh</mat-icon>
+                                    </a>
+                                    <img *ngIf="!isARefresh" class="h-load" src="../../assets/images/ajax-loader.gif"
+                                      alt="loading" />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="w-33"><img src="../../assets/images/ebay.jpg" align="left" border="0"
+                                      class="img-oth" alt="ebay">
+                                  </td>
+                                  <td class="oth-price">
+                                    <h5 *ngIf="filterVData[pIndex]?.ebayPrice != 'NA'">From: <span class="green">£{{filterVData[pIndex]?.ebayPrice}}</span></h5>
+                                    <h5 *ngIf="filterVData[pIndex]?.ebayPrice == 'NA'">From: <span class="green">NA</span></h5>
+                                  </td>
+                                  <td class="text-center">
+                                    <button *ngIf="filterVData[pIndex]?.ebayLink && filterpData[pIndex]?.ebayPrice != 'NA'" class="btn btn-primary btn-sm">
+                                      <a class="btn btn-sm white" href="{{filterVData[pIndex]?.ebayLink}}" target="_blank">
+                                        In Store</a>
+                                    </button>
+                                  </td>
+                                  <td class="v-btm">
+                                    <a class="pointer" *ngIf="isERefresh" (click)="isEbayPrice(filterVData[pIndex]?.artEANNumber,filterVData[pIndex]?._id,pIndex,true)">
+                                      <mat-icon>refresh</mat-icon>
+                                    </a>
+                                    <img *ngIf="!isERefresh" class="h-load" src="../../assets/images/ajax-loader.gif"
+                                      alt="loading" />
+                                  </td>
+                                </tr>
+                              </table>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel expanded="true" class="mb-2 shadow-none bg-transparent">
+                              <mat-expansion-panel-header class="aco-header">
+                                <mat-panel-title>
+                                  Other Brands Available
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <div class="search-results col-gap row mt-2">
+                                <div *ngFor="let item3 of filterVData;let i = index" class="col-md-12 mb-0 mt-0">
+                                  <a class="pointer" (click)="radioChange($event,item3?._id,i,item3?.lapArtId)">
+                                    <mat-card class="box-shadow-md mat-card mb-2 pb-0 pt-0" [style.border]="isRadioSelected(item3?._id) ? '1px solid #283593' : 'none'">
+                                      <table class="table">
+                                        <tr>
+                                          <td class="border-0 pl-1 pr-1 p-0 w-15">
+                                            <img class="other-img" onerror="this.src='../../assets/images/noimage.png'"
+                                              [src]="imageURL + item3.articleMediaFiles" alt="{{item3?.supBrand}} {{item3?.artArticleNr}} {{item3?.descriptions}}">
+                                          </td>
+                                          <td class="price-table w-45">
+                                            <h6>{{item3?.supBrand}}
+                                            </h6>
+                                          </td>
+                                          <td class="price-table w-40">
+                                            <h6 *ngIf="item3.price != ''">Price: <span class="green">{{item3?.price}}</span></h6>
+                                            <h6 *ngIf="item3.price == ''">Price: <span class="green">NA</span></h6>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </mat-card>
+                                  </a>
+                                </div>
+                                <div class="col-md-12 m-0 text-center mb-3">
+                                  <p class="font-bold fa-1x">Showing {{noOfProducts}} {{sCategory}}</p>
+                                  <button *ngIf="filterVData.length > 0 && isLoadAll" class="btn btn-primary btn-sm btn-lg"
+                                    (click)="onScrollDownVarient()">Load More</button>
+                                </div>
+                              </div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel expanded="false" class="mb-2" *ngIf="filterCrossRef">
+                              <mat-expansion-panel-header class="aco-header">
+                                <mat-panel-title>
+                                  Aftermarket Equivalent
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <div class="p-4">{{filterCrossRef}}</div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel expanded="false" class="mb-2" *ngIf="filterOE">
+                              <mat-expansion-panel-header class="aco-header">
+                                <mat-panel-title>
+                                  OE Numbers
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <div class="p-4">{{filterOE}}</div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel expanded="false" class="mb-2" *ngIf="filterCategory">
+                              <mat-expansion-panel-header class="aco-header">
+                                <mat-panel-title>
+                                  About {{make}} {{model}} {{sCategory}}
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <div class="p-4" [innerHTML]="filterCategoryData(filterCategory)">
+                              </div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel expanded="false" class="mb-2" *ngIf="filterBrand">
+                              <mat-expansion-panel-header class="aco-header">
+                                <mat-panel-title>
+                                  About {{filterVData[pIndex]?.supBrand}} {{sCategory}}
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <div class="p-4" [innerHTML]="filterBrandData1(filterBrand)">
+                              </div>
+                            </mat-expansion-panel>
+                          </mat-accordion>
+
+                        </mat-sidenav-content>
+                      </mat-sidenav-container>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+
+              <div class="col-gap row" *ngIf="isLocation">
+                <mat-chip-list #chipList single class="w-100 text-center">
+                  <mat-chip *ngFor="let item of locationData" [selectable]="true" [selected]="true">
+                    {{item?.location1}}
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+              <mat-sidenav-container class="example-container w-100" *ngIf="isLocation">
+                <mat-sidenav-content>
+                  <div *ngIf="isLocation">
+                    <div fxLayout='row wrap' fxLayoutAlign="center center">
+                      <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md=100 fxFlex.lg="100" fxFlex.xl="100">
+                        <div fxLayout='row wrap' class="position-relative">
+                          <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md=50 fxFlex.lg="50" fxFlex.xl="50" class="text-center">
+                            <div class="m-2">
+                              <carousel [interval]="false">
+                                <slide>
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.articleMediaFiles" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                                <slide *ngIf="filterpData[pIndex]?.image2">
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.image2" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                                <slide *ngIf="filterpData[pIndex]?.image3">
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.image3" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                                <slide *ngIf="filterpData[pIndex]?.image4">
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.image4" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                                <slide *ngIf="filterpData[pIndex]?.image5">
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.image5" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                                <slide *ngIf="filterpData[pIndex]?.image6">
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.image6" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                                <slide *ngIf="filterpData[pIndex]?.image7">
+                                  <div class="text-center py-5 bg-white text-white">
+                                    <img mat-card-image [src]="imageURL + filterpData[pIndex]?.image7" alt="{{filterpData[pIndex]?.supBrand}} {{filterpData[pIndex]?.artArticleNr}} {{filterpData[pIndex]?.descriptions}}"
+                                      class="mt-2 img-yin" onerror="this.src='../../assets/images/noimage.png'">
+                                  </div>
+                                </slide>
+                              </carousel>
+                            </div>
+                          </div>
+                          <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md=50 fxFlex.lg="50" fxFlex.xl="50" class="m-auto">
+                            <h4>{{filterpData[pIndex]?.supBrand}} - {{filterpData[pIndex]?.artArticleNr}}
+                              <embryo-SocialShareProduct class="float-right" [url]="shareUrl"></embryo-SocialShareProduct>
+                            </h4>
+                            <div>
+                              <ul class="no-style">
+                                <li>
+                                  <h5 class="font-medium m-0">From : <span class="green" *ngIf="filterpData[pIndex]?.price != ''">{{filterpData[pIndex]?.price}}</span>
+                                    <span class="green" *ngIf="filterpData[pIndex]?.price == ''">NA</span>
+                                  </h5>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <mat-accordion multi="true">
+                      <mat-expansion-panel [expanded]="isPriceView == 0" (closed)="setStep(1)" class="mb-2">
+                        <mat-expansion-panel-header class="aco-header">
+                          <mat-panel-title>
+                            Available Stores
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <table class="table">
+                          <tr>
+                            <td class="w-33"><img src="../../assets/images/amazon.jpg" align="left" border="0" class="img-oth"
+                                alt="amazon">
+                            </td>
+                            <td class="oth-price">
+                              <h5 *ngIf="filterpData[pIndex]?.price != ''">From: <span class="green">{{filterpData[pIndex]?.price}}</span></h5>
+                              <h5 *ngIf="filterpData[pIndex]?.price == ''">From: <span class="green">NA</span></h5>
+                            </td>
+                            <td class="text-center">
+                              <button *ngIf="filterpData[pIndex]?.amazonLink" class="btn btn-primary btn-sm">
+                                <a class="btn btn-sm white" href="{{filterpData[pIndex]?.amazonLink}}" target="_blank">
+                                  In Store</a>
+                              </button>
+                            </td>
+                            <td class="v-btm">
+                              <a class="pointer" *ngIf="isARefresh" (click)="isAmazonPrice(filterpData[pIndex]?.artEANNumber,filterpData[pIndex]?.supBrand,filterpData[pIndex]?.artArticleNr,filterpData[pIndex]?._id,pIndex,false)">
+                                <mat-icon>refresh</mat-icon>
+                              </a>
+                              <img *ngIf="!isARefresh" class="h-load" src="../../assets/images/ajax-loader.gif" alt="loading" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="w-33"><img src="../../assets/images/ebay.jpg" align="left" border="0" class="img-oth"
+                                alt="ebay">
+                            </td>
+                            <td class="oth-price">
+                              <h5 *ngIf="filterpData[pIndex]?.ebayPrice != 'NA'">From: <span class="green">£{{filterpData[pIndex]?.ebayPrice}}</span></h5>
+                              <h5 *ngIf="filterpData[pIndex]?.ebayPrice == 'NA'">From: <span class="green">NA</span></h5>
+                            </td>
+                            <td class="text-center">
+                              <button *ngIf="filterpData[pIndex]?.ebayLink && filterpData[pIndex]?.ebayPrice != 'NA'"
+                                class="btn btn-primary btn-sm">
+                                <a class="btn btn-sm white" href="{{filterpData[pIndex]?.ebayLink}}" target="_blank">
+                                  In Store</a>
+                              </button>
+                            </td>
+                            <td class="v-btm">
+                              <a class="pointer" *ngIf="isERefresh" (click)="isEbayPrice(filterpData[pIndex]?.artEANNumber,filterpData[pIndex]?._id,pIndex,false)">
+                                <mat-icon>refresh</mat-icon>
+                              </a>
+                              <img *ngIf="!isERefresh" class="h-load" src="../../assets/images/ajax-loader.gif" alt="loading" />
+                            </td>
+                          </tr>
+                        </table>
+                      </mat-expansion-panel>
+
+                      <mat-expansion-panel expanded="true" class="mb-2 shadow-none bg-transparent">
+                        <mat-expansion-panel-header class="aco-header">
+                          <mat-panel-title>
+                            Other Brands Available
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="search-results row p-0 mt-2 ">
+                          <div *ngFor="let item3 of filterpData;let i = index" class="col-md-12 mb-0" (click)="radioChange($event,item3?._id,i,item3?.lapArtId)">
+                            <a class="pointer" (click)="radioChange($event,item3?._id,i,item3?.lapArtId)">
+                              <mat-card class="box-shadow-md mat-card mb-2 pb-0 pt-0" [style.border]="isRadioSelected(item3?._id) ? '1px solid #283593' : 'none'">
+                                <table class="table">
+                                  <tr>
+                                    <td class="border-0 pl-1 pr-1 p-0 w-15">
+                                      <img class="other-img" onerror="this.src='../../assets/images/noimage.png'" [src]="imageURL + item3.articleMediaFiles"
+                                        alt="{{item3?.supBrand}} {{item3?.artArticleNr}} {{item3?.descriptions}}">
+                                    </td>
+                                    <td class="price-table w-45">
+                                      <h6>{{item3?.supBrand}}
+                                      </h6>
+                                    </td>
+                                    <td class="price-table w-40">
+                                      <h6 *ngIf="item3.price != ''">Price: <span class="green">{{item3?.price}}</span></h6>
+                                      <h6 *ngIf="item3.price == ''">Price: <span class="green">NA</span></h6>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </mat-card>
+                            </a>
+                          </div>
+                          <div class="col-md-12 m-0 text-center mb-3">
+                            <p class="font-bold fx-1">Showing {{noOfProducts}} {{sCategory}}</p>
+                            <button *ngIf="filterpData.length > 0 && isLoadAll" class="btn btn-primary btn-sm btn-lg"
+                              (click)="onScrollDown()">Load
+                              More
+                            </button>
+                          </div>
+
+                        </div>
+                      </mat-expansion-panel>
+
+                      <mat-expansion-panel expanded="false" class="mb-2" *ngIf="sCategory">
+                        <mat-expansion-panel-header class="aco-header">
+                          <mat-panel-title>
+                            Aftermarket Equivalent
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="p-4" [innerHTML]="filterCrossRefData(sCategory,'')"></div>
+                      </mat-expansion-panel>
+
+                      <mat-expansion-panel expanded="false" class="mb-2" *ngIf="sCategory">
+                        <mat-expansion-panel-header class="aco-header">
+                          <mat-panel-title>
+                            OE Numbers
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="p-4" [innerHTML]="filterOEData(sCategory,'')"></div>
+                      </mat-expansion-panel>
+
+                      <mat-expansion-panel expanded="false" class="mb-2" *ngIf="filterCategory">
+                        <mat-expansion-panel-header class="aco-header">
+                          <mat-panel-title>
+                            About {{make}} {{model}} {{sCategory}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="p-4" [innerHTML]="filterCategoryData(filterCategory)">
+                        </div>
+                      </mat-expansion-panel>
+
+                      <mat-expansion-panel expanded="false" class="mb-2" *ngIf="filterBrand">
+                        <mat-expansion-panel-header class="aco-header">
+                          <mat-panel-title>
+                            About {{filterpData[pIndex]?.supBrand}} {{sCategory}}
+                          </mat-panel-title>
+
+                        </mat-expansion-panel-header>
+                        <div class="p-4" [innerHTML]="filterBrandData(filterBrand)">
+                        </div>
+                      </mat-expansion-panel>
+
+                    </mat-accordion>
+                  </div>
+                </mat-sidenav-content>
+              </mat-sidenav-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

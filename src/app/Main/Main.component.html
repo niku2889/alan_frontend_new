@@ -1,0 +1,22 @@
+<!-- <div id="google_translate_element"></div> -->
+<div [dir]="isRtl">
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav [(opened)]="embryoService.sidenavOpen" class="sidebar-area" mode="over">
+      <mat-nav-list>
+        <div class="close-btn-sidebar">
+          <a href="javascript:void(0)" (click)="embryoService.sidenavOpen = false">
+            <i class="material-icons">
+              close
+            </i>
+          </a>
+        </div>
+        <embryo-SidebarMenu *ngFor="let item of menuItems.getMainMenu()" [item]="item"></embryo-SidebarMenu>
+      </mat-nav-list>
+    </mat-sidenav>
+    <HeaderOne></HeaderOne>
+    <div class="main">
+      <router-outlet></router-outlet>
+    </div>
+    <FooterOne></FooterOne>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,25 @@
+<ng-container>
+    <div class="inner-container">
+        <div class="container">
+            <div fxLayout="row wrap">
+                <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="33" fxFlex.lg="33" fxFlex.xl="33" *ngFor="let post of posts">
+                    <a class="a-dec" [routerLink]="['/blog',post.slug]">
+                        <mat-card class="m-3">
+                            <mat-card-header>
+                                <mat-card-title><strong>{{ post.title.rendered }}</strong> </mat-card-title>
+                                <mat-card-subtitle>{{ post.date_gmt | date }}</mat-card-subtitle>
+                            </mat-card-header>
+                            <img matCardImage class="img-blog" *ngIf="post['_embedded']['wp:featuredmedia']" onerror="this.src='../../assets/images/about-contact.jpg'" [src]="post['_embedded']['wp:featuredmedia'][0]?.source_url">
+                            <img matCardImage class="img-blog" *ngIf="!post['_embedded']['wp:featuredmedia']"  src="../../assets/images/about-contact.jpg">
+                            <mat-card-content [innerHTML]="post.content.rendered | slice:0:150"></mat-card-content>
+                            <mat-card-actions align="start">
+                                <a mat-button [routerLink]="['/blog',post.slug]">View</a>
+                            </mat-card-actions>
+                        </mat-card>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-container>

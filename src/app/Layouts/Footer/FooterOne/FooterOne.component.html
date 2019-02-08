@@ -1,0 +1,61 @@
+<footer>
+  <div class="footer-v1">
+    <div class="container">
+      <div class="footer-top-v1">
+        <div fxLayout="row wrap" class="col-gap">
+          <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="40" fxFlex.lg="40" fxFlex.xl="40">
+            <span class="sline">About Compare The Car Part</span>
+            <!-- <h6>About Company<span></span></h6> -->
+            <p>
+              Our mission is to simplify how car parts are ordered, making choosing a car part as easy as ordering a
+              coffee. Find the cheapest, closest or brand of your choice.
+
+            </p>
+          </div>
+
+          <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="60" fxFlex.lg="60" fxFlex.xl="60" *ngFor="let menu of menuItems.getFooterOneMenu()">
+            <table class="w-100">
+              <tr>
+                <td class="w-50">
+                  <div>
+                    <span class="sline">{{menu.name | translate}}</span>
+                    <!-- <h6 style="margin-left: 8px;">{{menu.name | translate}}<span style="width:90px!important;"></span></h6> -->
+                    <mat-list class="list-sm p-0" *ngFor="let subMenu of menu.children">
+                      <mat-list-item *ngIf="subMenu.type == 'link'">
+                        - &nbsp; <a [routerLink]="['/'+subMenu.state]" routerLinkActive="active-link">
+                          {{subMenu.name | translate}}</a>
+                      </mat-list-item>
+                    </mat-list>
+                  </div>
+                </td>
+                <td class="w-50">
+                  <div>
+                    <!-- <span class="sline">Navigation</span> -->
+                    <!-- <h6 style="margin-left: 8px;">Support Us<span style="width:90px!important;"></span></h6> -->
+                    <mat-list class="list-sm mt-1">
+                      <mat-list-item>
+                        <embryo-SocialShare></embryo-SocialShare>
+                      </mat-list-item>
+                    </mat-list>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <hr class="m-0">
+      <div class="footer-bottom-v1">
+        <div fxLayout='row wrap' class="col-gap">
+          <!-- <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="50" fxFlex.lg="50" fxFlex.xl="50">
+            <img src="assets/images/cards.png" width="218" height="18" alt="Credit Cards">
+          </div> -->
+          <div fxFlex.xs="100" fxFlex.sm="100" fxFlex.md="100" fxFlex.lg="100" fxFlex.xl="100" class="text-right">
+            <!-- &copy; All Rights Reversed | MyIQIs Ltd -->
+            Version {{version}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

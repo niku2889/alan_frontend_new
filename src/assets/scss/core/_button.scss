@@ -1,0 +1,19 @@
+//button
+.simple-btn {
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	display: inline-flex;
+	align-content: center;
+	align-items: center;
+}
+
+.button-lg {
+	min-width: 160px !important;
+	min-height: 50px;
+}
+
+.simple-btn .material-icons {
+	margin-right: 0.5rem;
+	font-size: 1rem;
+}

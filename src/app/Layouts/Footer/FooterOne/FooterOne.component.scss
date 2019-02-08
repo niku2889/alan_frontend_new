@@ -1,0 +1,38 @@
+.ulborder{
+    content: '';
+    border-bottom: 5px;
+    width: 0;
+    transition: all 0.3s ease;
+    height: 5px;
+    left: 0;
+    right: 0;
+    background: #ff5722;
+    display: block;
+    position: absolute;
+    bottom: 0;
+}
+
+h6 {
+    text-decoration: none;
+  }
+
+  h6 span {
+      display:block;
+      border-bottom:3px solid #ff5722;
+      width: 25%;
+      padding-bottom: 4px;
+  }
+
+.sline{
+    font-size: 1rem;
+    font-weight: 500;
+    // border-bottom:3px solid #ff5722;
+}
+
+:host ::ng-deep .footer-v1 {
+    font-weight: 100;
+}
+
+:host ::ng-deep a:hover {
+    color: white!important;
+}
